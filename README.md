@@ -8,8 +8,16 @@ Korean Sentence Embedding Model Performance Benchmark for RAG System
     pip install -r requirement.txt
 
 ### 1. 실험배경
-  1. 기존에 사용한 한국어 임베딩 모델의 경우 AVG Score가 가장 높은 KoSimCSE-RoBERTa-multitask를 사용함.
-     
+	  1-1. 한국어, 특히 복지 도메인에 기반한 Embedding Model의 필요성
+  	1-2. 이전 진행 사항
+      - 이전에 사용한 Base Korean Embedding Model: KoSimCSE-RoBERTa-multitask
+        - 한국어 Embedding Model 중 AVG Score가 가장 높은 Model 사용
+      - Tokenizer Vocab 추가 및 Embedding Model Domain Adaptation 진행
+        - Retriever 결과의 미흡함 확인
+        - 더 나은 성과를 위해 추가적인 실험과 비교 분석 필요
+  	1-3. 연구 목적
+  		- 실험을 통한 Korean Embedding Model 선정과 하이퍼 파리미터 조정함으로써 개선된 성능 도출
+       
 ### 2. 가정
   위 배경에 의거하여 한국어 문장 임베딩 모델과 그에따른 하이퍼파라미터를 조정함으로써 관련된 문서가 잘 도출되는 성능에 직결될 것이라 생각하였다. 즉, Korean Sentence Embedding Model선정과 해당모델에 대한 Hyper Parameter 조합에 따라 가장 Retriever 결과가 가장 잘 나오는 조합과 모델을 선정한다. 즉, 아래와 같은 2가지 방법을 바탕으로 성능비교를 진행하고자 한다.
      
