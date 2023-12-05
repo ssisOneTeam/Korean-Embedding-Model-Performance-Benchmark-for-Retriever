@@ -1,31 +1,45 @@
 # Korean-Embedding-Model-Performance-Benchmark-for-Retriever
-Korean Sentence Embedding Model Performance Benchmark for RAG
+Korean Sentence Embedding Model Performance Benchmark for RAG System
 
-## 목표 : 한국어 임베딩 모델에 대한 성능 벤치마킹
+## 목표
+  > 한국어 임베딩 모델과 하이퍼파라미터 조정에 따른 Retriever 성능비교
 
-### 실험한 배경
-`pip install -r requirement.txt`
+### 0. 테스트 환경
+    pip install -r requirement.txt
 
-### 배경
+### 1. 실험배경
   1. 기존에 사용한 한국어 임베딩 모델의 경우 AVG Score가 가장 높은 KoSimCSE-RoBERTa-multitask를 사용함.
      
-### 가정
-  1. 우리의 가정 : 한국어 임베딩 모델에 대한 하이퍼 파라미터 조합에 따라 Retriever가 더 잘 되나 안되나
+### 2. 가정
+  위 배경에 의거하여 한국어 문장 임베딩 모델과 그에따른 하이퍼파라미터를 조정함으로써 관련된 문서가 잘 도출되는 성능에 직결될 것이라 생각하였다. 즉, Korean Sentence Embedding Model선정과 해당모델에 대한 Hyper Parameter 조합에 따라 가장 Retriever 결과가 가장 잘 나오는 조합과 모델을 선정한다. 즉, 아래와 같은 2가지 방법을 바탕으로 성능비교를 진행하고자 한다.
      
-### 방법
-  1. 다양한 모델을 실험해보고 그중 가장 좋은 모델을 선정 (hitrate로 평가)
-      1. (Model list)
-      2.  왜 요런 Model List 를 만들었는지? (이유 : 왜 모든 모델들이 다 SBERT 기반 모델들인지?)
-      3.  hitrate를 평가지표로 사용한 이유? 근거
-  2. 하이퍼 파라미터 조합
-      1. 어떤 하이퍼 파라미터 조정할거고
-      2. 각 하이퍼 파라미터 어느 범위내에서 조정할거고
-      3. 어떻게 조정할거다. (전수조사 or GridsearchCV, etc… )
-### 실험결과
-    1. 테이블형태로 보여주는게 GOAT
-    2.  실험 01 결과
-    3.  실험 02 결과
-    4.  최종 결과
 
-### 참고자료
-    1. 참조한 자료 목록
+### 3. 방법
+
+  1. 고성능의 Retriever 결과도출을 위한 다양한 한국어 문장 임베딩 모델들에 대한 성능비교 (HitRate)
+    1-1. 다양한 한국어 문장 임베딩 모델 리스트업
+      - 모델 선정이유/근거
+      - 평가지표 선정이유/근거
+    
+      1-2. Retriever 성능평가 진행
+      - 성능평가 방식 선정
+      - 성능평가 진행
+
+      1-3. 기존 모델(=KoSimCSE-RoBERTa-multitask)과의 Performance Benchmarking 진행
+      
+  2. 가장 높은 성능을 가지는 모델에 대하여 하이퍼파라미터 조정 진행
+    2-1. 하이퍼파라미터 선정
+    2-2. 하이퍼파라미터 튜닝후 성능평가 진행
+      - 성능평가 방식 선정 (전수조사, GridsearchCV, etc… )
+      - 성능평가 진행  
+      
+      2-3. 하이퍼파라미터 튜닝 전/후 Performance Benchmarking 진행
+
+### 4. 실험결과
+  1. 테이블형태로 보여주는게 GOAT
+  2.  실험 01 결과
+  3.  실험 02 결과
+  4.  최종 결과
+
+### 5. 참고자료
+  1. 참조한 자료 목록
