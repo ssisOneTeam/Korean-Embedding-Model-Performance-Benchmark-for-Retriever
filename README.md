@@ -14,10 +14,11 @@ Korean Sentence Embedding Model Performance Benchmark for RAG System
   **2. 이전 진행 사항**
   
     2-1. 이전에 사용한 Base Korean Embedding Model: KoSimCSE-RoBERTa-multitask
-   	- 한국어 Embedding Model 중 AVG Score가 가장 높은 Model 사용
+        - 한국어 Embedding Model 중 AVG Score가 가장 높은 Model 사용
     2-2. Tokenizer Vocab 추가 및 Embedding Model Domain Adaptation 진행
         - Retriever 결과의 미흡함 확인
         - 더 나은 성과를 위해 추가적인 실험과 비교 분석 필요
+        
   **3. 연구 목적**
   
     - 실험을 통한 Korean Embedding Model 선정과 하이퍼 파리미터 조정함으로써 개선된 성능 도출
