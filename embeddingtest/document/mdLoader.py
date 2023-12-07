@@ -105,8 +105,8 @@ class BaseDBLoader:
     
     def __process_document_metadata(self, documents:list)->list:
         """get metadata edit internal methods and integrate all. """
-        metadata_json = self.__read_tag_file("metadata.json")
-        url_table = self.__read_url_table("url_table.csv")
+        metadata_json = self.__read_tag_file("document/metadata.json")
+        url_table = self.__read_url_table("document/url_table.csv")
 
         for document in documents:
             #### title

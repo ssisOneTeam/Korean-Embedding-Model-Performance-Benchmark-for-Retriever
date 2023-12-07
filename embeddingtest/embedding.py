@@ -1,11 +1,8 @@
-import os
 import torch
 
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings as STE
 from langchain.embeddings import OpenAIEmbeddings
 from settings import OPENAI_API_KEY
-
-from sentence_transformers import SentenceTransformer
 
 class EmbeddingLoader:
     class SentenceTransformerEmbedding:
@@ -42,5 +39,5 @@ class EmbeddingLoader:
 
 ## test
 if __name__ == "__main__" :
-    # setup = EmbeddingLoader(from_default_template=False, model_name="workspace/dadt_epoch2_kha_tok", encode_kwargs = {'normalize_embeddings': True}).load()
-    setup = EmbeddingLoader(model_name="workspace/dadt_epoch2_kha_tok", encode_kwargs = {'normalize_embeddings': True})
+    PATH_YOUR_EMBEDDING_MODEL = "PATH WHERE YOUR EMBEDDING MODEL IS"
+    setup = EmbeddingLoader.SentenceTransformerEmbedding(model_name=PATH_YOUR_EMBEDDING_MODEL, encode_kwargs = {'normalize_embeddings': True})
