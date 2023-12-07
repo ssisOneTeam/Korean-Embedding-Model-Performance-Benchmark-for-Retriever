@@ -1,5 +1,7 @@
 """langchain document 관련해서 db(markdownDB) 불러와서 
-    document로 parse하는 과정 object로 생성."""
+    document로 parse하는 과정 object로 생성. 
+    
+    need url_table, metadata.json """
 
 import os
 import uuid

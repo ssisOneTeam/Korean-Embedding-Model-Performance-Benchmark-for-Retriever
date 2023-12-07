@@ -3,8 +3,9 @@ import torch
 
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings as STE
 from langchain.embeddings import OpenAIEmbeddings
-from sentence_transformers import SentenceTransformer
 from settings import OPENAI_API_KEY
+
+from sentence_transformers import SentenceTransformer
 
 class EmbeddingLoader:
     class SentenceTransformerEmbedding:
@@ -33,10 +34,11 @@ class EmbeddingLoader:
     class OpenAIEmbedding:
         def __init__(self) -> None:
             print("OpenAI Embedding has been activated.")
+            self.embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+            return
 
-            OpenAIEmbeddings(api_key=OPENAI_API_KEY)
-
-
+        def load(self):
+            return self.embedding
 
 ## test
 if __name__ == "__main__" :
