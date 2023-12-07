@@ -1,2 +1,5 @@
+#cache
+__pycache__
+
 #api key
 settings.py

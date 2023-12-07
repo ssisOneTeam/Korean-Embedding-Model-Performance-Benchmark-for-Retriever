@@ -1,0 +1,1 @@
+## Storage for HuggingFace Embedding Model 

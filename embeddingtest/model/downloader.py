@@ -35,6 +35,7 @@ class EmbeddingDownLoader() :
         print(f'model {self.model} download at path {self.path}.')
         return None
 
+#test
 if __name__ == "__main__" :
     loader = EmbeddingDownLoader()
     loader.download()
