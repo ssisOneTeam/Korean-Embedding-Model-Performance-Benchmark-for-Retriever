@@ -7,7 +7,7 @@
 
 import os
 
-class EmbeddingDownLoader() :
+class EmbeddingDownLoader:
     def __init__ (self, model:str, path=None,) -> None:
         try :
             from sentence_transformers import SentenceTransformer
