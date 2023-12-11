@@ -6,6 +6,7 @@
 '''
 
 import os
+from decorators import checktime
 
 class EmbeddingDownLoader:
     def __init__ (self, model:str, path=None,) -> None:
@@ -19,7 +20,10 @@ class EmbeddingDownLoader:
         
         self.model = model
         self.path = path
-        
+
+        print(f"model {self.model} has been initialized for download.")
+    
+    @checktime
     def download(self) -> None:
         from sentence_transformers import SentenceTransformer
 

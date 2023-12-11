@@ -166,7 +166,6 @@ class TeamALoader(BaseDBLoader):
                 doc_list = self.text_splitter.split_documents(doc_list)
             self.storage.extend(doc_list)
         
-############################################################## 11-27 metadata edit
         # metadata edit
         self.storage = self._process_document_metadata(self.storage)
 
@@ -242,5 +241,3 @@ class TeamBLoader(BaseDBLoader):
         print("loading Documents takes", (end_time-start_time).total_seconds(), "seconds.")
 
         return self.storage
-
-        
