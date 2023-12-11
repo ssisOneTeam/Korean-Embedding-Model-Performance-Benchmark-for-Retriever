@@ -98,12 +98,18 @@ class BaseDBLoader:
             metafilename = metafilename.replace(key, value)
         return metafilename
 
-    def _strip_replace_text(self, s: str)->str:
+    def _strip_replace_text(self, s:str)->str:
         regex = '([^가-힣0-9a-zA-Z.,·•%↓()\s\\\])'
         # regex = "([^가-힣0-9a-zA-Z])"
         s = re.sub(pattern=regex, repl="", string=s)
         s = self._replace_metadata(metafilename=s, replacer={" ":"", '•':'·', 'Ⅰ':'', 'Ⅱ':'', "_":""})
         return s
+    
+    def _get_category_from_source(self, source:str)->str:
+        """get category from Document object metadata['source'] and parse directory(for category use.)"""
+        parsed_source = source.split("\\")
+        dir_source = parsed_source[-2]
+        return self._replace_metadata(dir_source)
     
     def _process_document_metadata(self, documents:list)->list:
         """get metadata edit internal methods and integrate all. """
@@ -111,11 +117,16 @@ class BaseDBLoader:
         url_table = self._read_url_table(self.path_url_table)
 
         for document in documents:
-            #### title
+            #### get source from Document metadata
             meta_source = document.metadata["source"]
-            meta_source_parsed = meta_source.split("\\")[-1]
-            meta_source_parsed_get = meta_source_parsed[3:-3]
+            meta_source_parsed = meta_source.split("\\")
 
+            #### category
+            document.metadata["category"] = self._get_category_from_source(meta_source)
+
+            #### title
+            meta_source_parsed_file_name = meta_source_parsed[-1]
+            meta_source_parsed_get = meta_source_parsed_file_name[3:-3]
             result = self._replace_metadata(metafilename=meta_source_parsed_get)
             document.metadata["title"] = result
             
@@ -125,7 +136,7 @@ class BaseDBLoader:
             document.metadata["tag"] = metadata_json[title_parsed]
 
             #### url
-            result = url_table.loc[url_table["source"] == meta_source_parsed]["url"].values[0]
+            result = url_table.loc[url_table["source"] == meta_source_parsed_file_name]["url"].values[0]
 
             if result is np.nan :
                 document.metadata["url"] = ""
@@ -157,6 +168,7 @@ class TeamALoader(BaseDBLoader):
         # document pre-processing
         for db_folder in os.listdir(self.path_db):
             db_folder_abs = os.path.join(self.path_db, db_folder)
+
             directory_loader = DirectoryLoader(path=db_folder_abs, loader_cls=self.loader_cls, show_progress=show_progress, use_multithreading=use_multithreading)
             doc_list = directory_loader.load()
 
@@ -174,35 +186,6 @@ class TeamALoader(BaseDBLoader):
         print("loading Documents takes", (end_time-start_time).total_seconds(), "seconds.")
 
         return self.storage
-    
-    def _process_document_metadata(self, documents:list)->list:
-        """get metadata edit internal methods and integrate all. """
-        metadata_json = self._read_tag_file(self.path_metadata)
-        url_table = self._read_url_table(self.path_url_table)
-
-        for document in documents:
-            #### title
-            meta_source = document.metadata["source"]
-            meta_source_parsed = meta_source.split("\\")[-1]
-            meta_source_parsed_get = meta_source_parsed[3:-3]
-
-            result = self._replace_metadata(metafilename=meta_source_parsed_get)
-            document.metadata["title"] = result
-            
-            #### tag
-            title = document.page_content.split("\n")[0]
-            title_parsed = self._strip_replace_text(title)
-            document.metadata["tag"] = metadata_json[title_parsed]
-
-            #### url
-            result = url_table.loc[url_table["source"] == meta_source_parsed]["url"].values[0]
-
-            if result is np.nan :
-                document.metadata["url"] = ""
-            else :
-                document.metadata["url"] = result
-
-        return documents
     
     def _strip_replace_text(self, s: str)->str:
         regex = '([^가-힣0-9a-zA-Z])'
