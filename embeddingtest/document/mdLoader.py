@@ -11,7 +11,7 @@ import numpy as np
 import json
 
 from langchain.document_loaders import DirectoryLoader, UnstructuredMarkdownLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import TextSplitter
 from langchain.schema.document import Document
 
 from datetime import datetime
@@ -19,17 +19,11 @@ from datetime import datetime
 class BaseDBLoader:
     """markdownDB folder에서 불러온 다음에 폴더별로 내부에 있는 내용 Load해서 Split하고 저장함"""
 
-    def __init__(self, path_db:str, path_metadata:str, path_url_table:str, loader_cls=UnstructuredMarkdownLoader):
+    def __init__(self, path_db:str, path_metadata:str, path_url_table:str, text_splitter:TextSplitter, loader_cls=UnstructuredMarkdownLoader):
         #timecheck
         start_time = datetime.now()
         # textsplitter config
-        self.text_splitter = RecursiveCharacterTextSplitter(
-            separators=["\n\n", "\n", " ", ""],
-            chunk_size=200,
-            chunk_overlap=10,
-            is_separator_regex=False,
-        )
-
+        self.text_splitter = text_splitter
         # loaderclass config
         self.loader_cls = loader_cls
         # md 파일 담고 있는 전체 디렉터리 경로
@@ -155,38 +149,6 @@ class BaseDBLoader:
 ##################################################################################################################################################
 
 class TeamALoader(BaseDBLoader):
-    def load(self, is_split=False, is_regex=False, show_progress=True, use_multithreading=True) -> list[Document]: ### mul 수정
-        """ Get Directory Folder and documents -> parse, edit metadata -> langchain Document list. 
-        
-            args :
-                is_split: whether split or not(text_splitter)
-                is_regex: apply regex to edit document form. 
-                show_progress: show progress -> from LangChain.
-                use_multithreading: use multithread(cpu) -> from LangChain. """
-        #timecheck
-        start_time = datetime.now()
-        # document pre-processing
-        for db_folder in os.listdir(self.path_db):
-            db_folder_abs = os.path.join(self.path_db, db_folder)
-
-            directory_loader = DirectoryLoader(path=db_folder_abs, loader_cls=self.loader_cls, show_progress=show_progress, use_multithreading=use_multithreading)
-            doc_list = directory_loader.load()
-
-            if is_regex:
-                doc_list = self._result_to_regex(doc_list)            
-            if is_split:
-                doc_list = self.text_splitter.split_documents(doc_list)
-            self.storage.extend(doc_list)
-        
-        # metadata edit
-        self.storage = self._process_document_metadata(self.storage)
-
-        #timecheck
-        end_time = datetime.now()
-        print("loading Documents takes", (end_time-start_time).total_seconds(), "seconds.")
-
-        return self.storage
-    
     def _strip_replace_text(self, s: str)->str:
         regex = '([^가-힣0-9a-zA-Z])'
         s = re.sub(pattern=regex, repl="", string=s)
@@ -194,33 +156,3 @@ class TeamALoader(BaseDBLoader):
     
 class TeamBLoader(BaseDBLoader):
     """ Just Inherite BaseDBLoader. Recommand using this class for clarity. """
-
-    def load(self, is_split=False, is_regex=False, show_progress=True, use_multithreading=True) -> list[Document]: ### mul 수정
-        """ Get Directory Folder and documents -> parse, edit metadata -> langchain Document list. 
-        
-            args :
-                is_split: whether split or not(text_splitter)
-                is_regex: apply regex to edit document form. 
-                show_progress: show progress -> from LangChain.
-                use_multithreading: use multithread(cpu) -> from LangChain. """
-        #timecheck
-        start_time = datetime.now()
-        # document pre-processing
-        for db_folder in os.listdir(self.path_db):
-            db_folder_abs = os.path.join(self.path_db, db_folder)
-            directory_loader = DirectoryLoader(path=db_folder_abs, loader_cls=self.loader_cls, show_progress=show_progress, use_multithreading=use_multithreading)
-            doc_list = directory_loader.load()
-
-            if is_regex:
-                doc_list = self._result_to_regex(doc_list)            
-            if is_split:
-                doc_list = self.text_splitter.split_documents(doc_list)
-            self.storage.extend(doc_list)
-
-        self.storage = self._process_document_metadata(self.storage)
-
-        #timecheck
-        end_time = datetime.now()
-        print("loading Documents takes", (end_time-start_time).total_seconds(), "seconds.")
-
-        return self.storage

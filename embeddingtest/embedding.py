@@ -46,17 +46,16 @@ class EmbeddingLoader:
         def __init__(self) -> None:
             print("OpenAI Embedding has been activated.")
             self.embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
-            return
-        
+
         def checktime(func):
-            def wrapper(self, *args, **kwargs):
+            def wrapper(*args, **kwargs):
                 start_time = datetime.now()
                 result = func(*args, **kwargs)
                 end_time = datetime.now()
                 print(f"Function call {func.__name__} took {(end_time - start_time).total_seconds()}s to run.\n")
                 return result
             return wrapper
-        
+
         @checktime
         def load(self):
             return self.embedding
