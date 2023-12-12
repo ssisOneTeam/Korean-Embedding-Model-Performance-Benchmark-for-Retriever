@@ -19,4 +19,13 @@
 ### 비고
 
 - 이전에 실행할 때보다 gpt-4 호출이 느립니다. 요부분은 왜 그런지 모르겠네요. openai api쪽 문제인거 같아요.
+- 혹시나 환경 및 라이브러리 버전 문제로 안돌아간다면 `@ash-hun` 에게 문의주세요.
 - 테스트 실행 결과 (동일 경로 OurData.csv 참조)
+
+▼ 파일실행 로그 샘플 ▼
+<img width="1387" alt="image" src="https://github.com/ssisOneTeam/Korean-Embedding-Model-Performance-Benchmark-for-Retriever/assets/32566767/f08f2d0d-c6ed-4a51-98c9-e8ed90c8cf9c">
+
+<img width="1374" alt="image" src="https://github.com/ssisOneTeam/Korean-Embedding-Model-Performance-Benchmark-for-Retriever/assets/32566767/45ec20d3-879f-4e8a-a131-763df28670b7">
+
+▼ OurData.csv 샘플 ▼
+<img width="1053" alt="image" src="https://github.com/ssisOneTeam/Korean-Embedding-Model-Performance-Benchmark-for-Retriever/assets/32566767/efd799e7-1ef9-425b-bf46-48d4d68fab5d">
