@@ -81,7 +81,7 @@ def saveCSV(data):
     return df
 
 if __name__ == "__main__":
-    ABS_DIR = "../teamA/" # 최상위 디렉터리 경로
+    ABS_DIR = "../embeddingtest/data/teamA/" # 최상위 디렉터리 경로
     df = pd.DataFrame(columns=['Question', 'Answer', 'Documents'])
     chapter_list = os.listdir(ABS_DIR)
     outlist = ["readme.md", ".DS_Store"]
