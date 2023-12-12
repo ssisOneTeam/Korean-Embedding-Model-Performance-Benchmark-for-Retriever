@@ -55,6 +55,31 @@ prompt = {
             뛰어난 능력으로 만들어진 질문,답변 쌍은 중복된 내용이 전혀 없고 앞으로도 그럴 것입니다."""
 }
 
+def saveCSV(data):
+    # Q, A, Doc을 분리하여 저장할 리스트 생성
+    questions = []
+    answers = []
+    documents = []
+
+    # 데이터를 순회하며 Q, A, Doc에 해당하는 내용을 각 리스트에 추가
+    for item in data:
+        if item.startswith('(Q'):
+            questions.append(item[5:])
+        elif item.startswith('(A'):
+            answers.append(item[5:])
+        elif item.startswith('(Doc)'):
+            documents.append(item[6:])
+
+    # 데이터 프레임 생성
+    df = pd.DataFrame({
+        'Question': questions,
+        'Answer': answers,
+        'Documents': documents
+    })
+
+    print(df.head())
+    return df
+
 if __name__ == "__main__":
     ABS_DIR = "../teamA/" # 최상위 디렉터리 경로
     df = pd.DataFrame(columns=['Question', 'Answer', 'Documents'])
@@ -62,8 +87,9 @@ if __name__ == "__main__":
     outlist = ["readme.md", ".DS_Store"]
     md_contents = []
     file_list = []
-    test_data = []
+    Gen_data = []
 
+    # 디렉토리에서 각 Chapter에 해당하는 MD파일과 목록 파싱
     for title in chapter_list :
         # 예외처리
         if title in outlist :
@@ -82,51 +108,55 @@ if __name__ == "__main__":
     # ======================================================================
     #       Generate QA dataset
     # ======================================================================
-    for content in sorted(md_contents)[:1]:
-        qa_gen = f"""
-        ---
-        {content}
-        ---
+    for contents in md_contents[:1]: # Test용 1개 제도
+        content = list(contents.split('\n\n'))
+        # Log
+        print("    Content : ", content)
+        print("=="*50)
 
-        위 내용을 반영한 한국어 질문-응답-문맥 으로 이루어진 데이터셋 샘플 10개를 생성해줘.
-        내용은 절대 중복되면 안돼. 질문앞에는 (Q)가 붙고, 응답 앞에는 (A)가 붙어. 
-        만들어진 응답 뒤에 한줄 띄고 무조건 아래 내용을 이어붙여줘. 제도명은 위 내용의 제목을 사용하면 돼.
+        for paragraph in content[1:]: # 제도 타이틀 제외한 나머지 내용에 한해서 데이터셋 생성
+            qa_gen_short = f"""
+            ---
+            {paragraph}
+            ---
 
-        '(Doc) 제도명'
-        """
+            위 내용을 반영한 한국어 질문-응답-문맥 으로 이루어진 데이터셋 샘플 3개를 생성해줘.
+            내용은 절대 중복되면 안돼. 질문앞에는 (Q)가 붙고, 응답 앞에는 (A)가 붙어. 
+            만들어진 응답 뒤에 한줄 띄고 무조건 아래 내용을 이어붙여줘. 제도명은 위 내용의 제목을 사용하면 돼.
 
-        qa_dataset = []
-        
-        res = qa_generate(prompt['system'], qa_gen)
-        qa_dataset.append(res.replace('\n\n', '\n'))
-        
-        temp_data = []
-        temp_data.append(res)
-        print(qa_dataset)
+            '(Doc) 제도명'
+            """
 
-        for item in qa_dataset:
-            test_data.extend(list(item.split('\n')))
-    print(test_data)
+            qa_gen_long = f"""
+            ---
+            {paragraph}
+            ---
 
+            위 내용을 반영한 한국어 질문-응답-문맥 으로 이루어진 데이터셋 샘플 10개를 생성해줘.
+            내용은 절대 중복되면 안돼. 질문앞에는 (Q)가 붙고, 응답 앞에는 (A)가 붙어. 
+            만들어진 응답 뒤에 한줄 띄고 무조건 아래 내용을 이어붙여줘. 제도명은 위 내용의 제목을 사용하면 돼.
 
-    # 다른방식으로 사용했던 프롬프트 혹시 몰라 냅둬요~
-    # qa_gen_2 = f"""
-    #         ---
-    #         {content}
-    #         ---
+            '(Doc) 제도명'
+            """
 
-    #         위 내용을 '본문'이라고 할게. 이제부터 본문을 반영한 한국어 데이터셋 샘플을 10개 생성할거야.
-    #         데이터셋은 아래 구조에 따라 만들어야 해.
-    #         - Context : 본문의 제목
-    #         - Question : 본문의 내용과 관련된 질문, 내용이 중복되면 절대 안돼.
-    #         - Answer : Question에 해당하는 정답
-    #         - Answer_start : Context에서 Answer가 시작하는 위치인덱스
+            qa_dataset = []
+            
+            # '어르신 국가예방접종 지원 사업은 65세 이상 어르신을 대상으로 한다. 주민등록상 출생연도 기준으로 1958년 12월 31일 이전 출생자이 해당한다.'
+            # 위 문장이 length 82, 토큰개수로 바꾸려면 바꿔도 무방함.
+            if len(paragraph) > 80:
+                res = qa_generate(prompt['system'], qa_gen_long)
+            else:
+                res = qa_generate(prompt['system'], qa_gen_short)
+            
+            qa_dataset.append(res.replace('\n\n', '\n'))
+            
+            temp_data = []
+            temp_data.append(res)
+            print(" > 데이터셋 생성중... ", qa_dataset)
 
-    #         위 구조를 갖춘 데이터셋을 만들되 중복되는 내용없이 데이터셋을 10개 생성해줘.
-    #         전체 형태는 아래처럼 만들면 돼.
-    #         "context": ,
-    #         "question": ,
-    #         "answer":  ,
-    #         "answer_start": 
-    #         위의 4개가 딕셔너리 형태로 하고, 10개의 데이터셋이 하나의 리스트로 묶으면 돼.
-    #         """
+            for item in qa_dataset:
+                Gen_data.extend(list(item.split('\n')))
+
+    print("Results : ", Gen_data)
+    OurData = saveCSV(Gen_data)
+    OurData.to_csv('./OurData.csv')
