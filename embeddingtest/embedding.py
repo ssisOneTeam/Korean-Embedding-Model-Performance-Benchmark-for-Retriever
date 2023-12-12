@@ -1,8 +1,11 @@
-import torch
+import torch # _device_check
 
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings as STE
 from langchain.embeddings import OpenAIEmbeddings
 from settings import OPENAI_API_KEY
+from datetime import datetime
+
+
 
 class EmbeddingLoader:
     class SentenceTransformerEmbedding:
@@ -16,9 +19,20 @@ class EmbeddingLoader:
             kwargs.setdefault("model_kwargs", {'device': self._device_check()})
             self.kwargs = kwargs
             return
+        
+        def checktime(func):
+            def wrapper(*args, **kwargs):
+                start_time = datetime.now()
+                result = func(*args, **kwargs)
+                end_time = datetime.now()
+                print(f"Function call {func.__name__} took {(end_time - start_time).total_seconds()}s to run.\n")
+                return result
+            return wrapper
 
+        @checktime
         def load(self) -> STE:
             embedding = STE(**self.kwargs)
+            print(f"embedding model in path <{embedding.model_name}> has been loaded successfully.")
             return embedding
         
         def _device_check(self) -> str: 
@@ -33,7 +47,17 @@ class EmbeddingLoader:
             print("OpenAI Embedding has been activated.")
             self.embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
             return
-
+        
+        def checktime(func):
+            def wrapper(self, *args, **kwargs):
+                start_time = datetime.now()
+                result = func(*args, **kwargs)
+                end_time = datetime.now()
+                print(f"Function call {func.__name__} took {(end_time - start_time).total_seconds()}s to run.\n")
+                return result
+            return wrapper
+        
+        @checktime
         def load(self):
             return self.embedding
 
