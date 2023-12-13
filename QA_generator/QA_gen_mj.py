@@ -189,7 +189,7 @@ if __name__ == "__main__":
     backup = "\n\n".join(items)
     # 텍스트를 저장할 파일명
     # 백업 파일 명도 "backup_ch_xx.txt"로 맞춰주라
-    file_name = "backup_ch_02.txt"
+    file_name = "backup_ch_03.txt"
 
     # 저장할 텍스트 내용
     text_to_save = backup
@@ -203,5 +203,5 @@ if __name__ == "__main__":
     
     print("Results : ", Gen_data)
     OurData = saveCSV(Gen_data)
-    OurData.to_csv('./QA_ch_02.csv',encoding='utf-8') #chapter바뀌면 저장csv명 도 바꿔줘   './QA_ch_xx.csv'
+    OurData.to_csv('./QA_ch_03.csv',encoding='utf-8') #chapter바뀌면 저장csv명 도 바꿔줘   './QA_ch_xx.csv'
     print("*** csv 생성이 완료 되었습니다 ***") 
