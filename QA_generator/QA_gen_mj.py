@@ -10,9 +10,9 @@ llm = {
 }
 
 client = OpenAI(
-    # organization=os.getenv("org-O9FdU7OLhZ8G1NojsrCxrAwE"), # 환경변수에 OPENAI_ORGANIZATION_KEY를 설정합니다.
+    # organization=os.getenv("yours"), # 환경변수에 OPENAI_ORGANIZATION_KEY를 설정합니다.
     # api_key=os.getenv("OPENAI_API_KEY") # 환경변수에 OPENAI_API_KEY를 설정합니다.
-    api_key="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" # 환경변수에 OPENAI_API_KEY를 설정합니다.
+    api_key="your key" # 환경변수에 OPENAI_API_KEY를 설정합니다.
 )
 
 # Config
