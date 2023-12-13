@@ -10,9 +10,9 @@ llm = {
 }
 
 client = OpenAI(
-    # organization=os.getenv("yours"), # 환경변수에 OPENAI_ORGANIZATION_KEY를 설정합니다.
+    # organization=os.getenv("your_organization_id"), # 환경변수에 OPENAI_ORGANIZATION_KEY를 설정합니다.
     # api_key=os.getenv("OPENAI_API_KEY") # 환경변수에 OPENAI_API_KEY를 설정합니다.
-    api_key="your key" # 환경변수에 OPENAI_API_KEY를 설정합니다.
+    api_key="your api key" # 환경변수에 OPENAI_API_KEY를 설정합니다.
 )
 
 # Config
@@ -64,13 +64,25 @@ def saveCSV(data):
     documents = []
 
     # 데이터를 순회하며 Q, A, Doc에 해당하는 내용을 각 리스트에 추가
-    for item in data:
-        if item.startswith('(Q'):
-            questions.append(item)
-        elif item.startswith('(A'):
-            answers.append(item)
-        elif item.startswith('(Doc)'):
-            documents.append(item)
+    # for item in data:
+    #     if item.startswith('(Q)'):
+    #         questions.append(item[4:])
+    #     elif item.startswith('(Q'):
+    #         answers.append(item[5:])
+    #     elif item.startswith('(A)'):
+    #         answers.append(item[4:])
+    #     elif item.startswith('(A'):
+    #         answers.append(item[5:])
+    #     elif item.startswith('(Doc)'):
+    #         documents.append(item[6:])
+    if len(data) % 3:
+        print("뭔가 잘못 됨!!")
+        return
+    
+    for i in range(0, len(data), 3):
+        questions.append(data[i])
+        answers.append(data[i+1])
+        documents.append(data[i+2])
 
     # 데이터 프레임 생성
     df = pd.DataFrame({
@@ -84,13 +96,14 @@ def saveCSV(data):
 
 if __name__ == "__main__":
     print("현재 경로 : ",os.getcwd())
-    ABS_DIR = "./embeddingtest/data/test/" # 최상위 디렉터리 경로
+    ABS_DIR = "./embeddingtest/data/target/" #질문셋 만들 대상 챕터 넣는 디렉터리 경로
     df = pd.DataFrame(columns=['Question', 'Answer', 'Documents'])
     chapter_list = os.listdir(ABS_DIR)
     outlist = ["readme.md", ".DS_Store"]
     md_contents = []
     file_list = []
     Gen_data = []
+    items = []
 
     # 디렉토리에서 각 Chapter에 해당하는 MD파일과 목록 파싱
     for title in chapter_list :
@@ -111,10 +124,11 @@ if __name__ == "__main__":
     # ======================================================================
     #       Generate QA dataset
     # ======================================================================
-    for contents in md_contents[:1]: # ABS 폴더에 들어있는 모든 제도에 대해서 질문 만들어야됨 
+    for contents in md_contents: # ABS 폴더에 들어있는 모든 제도에 대해서 질문 만들어야됨 
 
         content = list(contents.split('\n\n'))
         # Log
+        print("=="*50)
         print("    Content : ", content)
         print("=="*50)
 
@@ -128,7 +142,6 @@ if __name__ == "__main__":
             내용은 절대 중복되면 안돼. 질문앞에는 (Q)가 붙고, 응답 앞에는 (A)가 붙어. 
             만들어진 응답 뒤에 한줄 띄고 무조건 아래 내용을 이어붙여줘. 
 
-            
             '(Doc) {content[0]}'
             """
 
@@ -157,17 +170,38 @@ if __name__ == "__main__":
             
             temp_data = []
             temp_data.append(res)
+
             print(" > 데이터셋 생성중... ", qa_dataset)
 
             for item in qa_dataset:
-                Gen_data.extend(list(item.split('\n')))
+                # Gen_data.extend(list(item.split('\n')))
                 
                 # 재준이형 바꿔본 부분
                 ## (Q), (A), (Doc) 부분도 같이 없애려고 해본건데
                 ## saveCSV 부분도 바꿔야 되서 일단 다시 생각중
-                # Gen_data.extend([s.strip() for s in re.split(pattern='\([QA]\d+\)|\(Doc\)', string=item) if s])
+                ### 수정하여 돌림
+                Gen_data.extend([s.strip() for s in re.split(pattern='\([QA]\d*\)|\(Doc\)', string=item) if s])
+                ## 백업용
+                items.append(item)
 
+
+    ## split전 내용 저장 -> 혹시 잘못됐을시 체크하고 대안세우기 위한 백업
+    backup = "\n\n".join(items)
+    # 텍스트를 저장할 파일명
+    # 백업 파일 명도 "backup_ch_xx.txt"로 맞춰주라
+    file_name = "backup_ch_02.txt"
+
+    # 저장할 텍스트 내용
+    text_to_save = backup
+
+    # 파일 열기 (쓰기 모드)
+    with open(file_name, 'w') as file:
+        # 텍스트 쓰기
+        file.write(text_to_save)
+
+    print(f'Text "{text_to_save}" has been saved to {file_name}')
+    
     print("Results : ", Gen_data)
     OurData = saveCSV(Gen_data)
-    OurData.to_csv('./QA_test_01_3.csv',encoding='utf-8')
-    print("*** csv 생성이 완료 되었습니다 ***")
+    OurData.to_csv('./QA_ch_02.csv',encoding='utf-8') #chapter바뀌면 저장csv명 도 바꿔줘   './QA_ch_xx.csv'
+    print("*** csv 생성이 완료 되었습니다 ***") 
