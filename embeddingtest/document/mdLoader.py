@@ -148,11 +148,50 @@ class BaseDBLoader:
 
 ##################################################################################################################################################
 
-class TeamALoader(BaseDBLoader):
+class TokenDBLoader(BaseDBLoader):
+    """ fix loading sequence
+
+        before: document -> split -> extract title
+        after: document -> title -> split 
+    
+    """
+
+    def load(self, is_split=False, is_regex=False, show_progress=True, use_multithreading=True) -> list[Document]:
+        """ Get Directory Folder and documents -> parse, edit metadata -> langchain Document list. 
+        
+            args :
+                is_split: whether split or not(text_splitter)
+                is_regex: apply regex to edit document form. 
+                show_progress: show progress -> from LangChain.
+                use_multithreading: use multithread(cpu) -> from LangChain. """
+        #timecheck
+        start_time = datetime.now()
+        # document pre-processing
+        for db_folder in os.listdir(self.path_db):
+            db_folder_abs = os.path.join(self.path_db, db_folder)
+            directory_loader = DirectoryLoader(path=db_folder_abs, loader_cls=self.loader_cls, show_progress=show_progress, use_multithreading=use_multithreading)
+            doc_list = directory_loader.load()
+
+            ## 여기에서 제목추출하고 보내는게 맞을듯....... (제목 추출 순서 변경 완료..)
+            doc_list = self._process_document_metadata(doc_list)
+
+            if is_regex:
+                doc_list = self._result_to_regex(doc_list)            
+            if is_split:
+                doc_list = self.text_splitter.split_documents(doc_list)
+            self.storage.extend(doc_list)
+
+        #timecheck
+        end_time = datetime.now()
+        print("loading Documents takes", (end_time-start_time).total_seconds(), "seconds.")
+
+        return self.storage
+
+class TeamALoader(TokenDBLoader):
     def _strip_replace_text(self, s: str)->str:
         regex = '([^가-힣0-9a-zA-Z])'
         s = re.sub(pattern=regex, repl="", string=s)
         return s
     
-class TeamBLoader(BaseDBLoader):
+class TeamBLoader(TokenDBLoader):
     """ Just Inherite BaseDBLoader. Recommand using this class for clarity. """
