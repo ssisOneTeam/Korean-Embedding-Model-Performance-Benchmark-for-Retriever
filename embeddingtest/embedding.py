@@ -6,7 +6,6 @@ from settings import OPENAI_API_KEY
 from datetime import datetime
 
 
-
 class EmbeddingLoader:
     class SentenceTransformerEmbedding:
         def __init__(self, **kwargs) -> None:

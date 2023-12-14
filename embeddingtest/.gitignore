@@ -3,5 +3,6 @@ __pycache__/
 #api key
 settings.py
 
+#chroma setup
 chroma/*
 !chroma/README.md

@@ -66,7 +66,7 @@ class BaseDBLoader:
         #timecheck
         end_time = datetime.now()
         print("loading Documents takes", (end_time-start_time).total_seconds(), "seconds.")
-
+        
         return self.storage
 
     def _result_to_regex(self, doc_list:list[Document]) -> list[Document]:
@@ -149,11 +149,11 @@ class BaseDBLoader:
 ##################################################################################################################################################
 
 class TokenDBLoader(BaseDBLoader):
-    """ fix loading sequence
+    """ 
+        fix loading sequence
 
         before: document -> split -> extract title
         after: document -> title -> split 
-    
     """
 
     def load(self, is_split=False, is_regex=False, show_progress=True, use_multithreading=True) -> list[Document]:
@@ -172,13 +172,14 @@ class TokenDBLoader(BaseDBLoader):
             directory_loader = DirectoryLoader(path=db_folder_abs, loader_cls=self.loader_cls, show_progress=show_progress, use_multithreading=use_multithreading)
             doc_list = directory_loader.load()
 
-            ## 여기에서 제목추출하고 보내는게 맞을듯....... (제목 추출 순서 변경 완료..)
+            ## 여기에서 제목추출하고 보내는게 맞을듯... (제목 추출 순서 변경 완료..) 231215
             doc_list = self._process_document_metadata(doc_list)
 
             if is_regex:
                 doc_list = self._result_to_regex(doc_list)            
             if is_split:
                 doc_list = self.text_splitter.split_documents(doc_list)
+
             self.storage.extend(doc_list)
 
         #timecheck
