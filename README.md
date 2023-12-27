@@ -67,7 +67,7 @@ Korean Sentence Embedding Model Performance Benchmark for RAG System
 
 ## Ⅴ. 컨트리뷰터
 
-<table>
+<table align="center">
   <tr>
     <td align="center">
       <a href="https://github.com/PangPangGod">
