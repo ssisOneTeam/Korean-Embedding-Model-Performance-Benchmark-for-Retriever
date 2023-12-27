@@ -65,7 +65,7 @@ Korean Sentence Embedding Model Performance Benchmark for RAG System
     <td align="center">
       <a href="https://github.com/PangPangGod">
         <img src="https://github.com/PangPangGod.png" width="100px;" alt="송준호"/><br />
-        <sub><b>김민식</b></sub>
+        <sub><b>송준호</b></sub>
       </a>
     </td>
     <td align="center">
@@ -77,7 +77,7 @@ Korean Sentence Embedding Model Performance Benchmark for RAG System
     <td align="center">
       <a href="https://github.com/MoonHeesun">
         <img src="https://github.com/MoonHeesun.png" width="100px;" alt="문희선"/><br />
-        <sub><b>김민식</b></sub>
+        <sub><b>문희선</b></sub>
       </a>
     </td>
     <td align="center">
@@ -89,13 +89,13 @@ Korean Sentence Embedding Model Performance Benchmark for RAG System
     <td align="center">
       <a href="https://github.com/myeongjun1007">
         <img src="https://github.com/myeongjun1007.png" width="100px;" alt="현명준"/><br />
-        <sub><b>김민식</b></sub>
+        <sub><b>현명준</b></sub>
       </a>
     </td>
     <td align="center">
       <a href="https://github.com/kha-jaejun">
         <img src="https://github.com/kha-jaejun.png" width="100px;" alt="가재준"/><br />
-        <sub><b>김민식</b></sub>
+        <sub><b>가재준</b></sub>
       </a>
     </td>
   </tr>
