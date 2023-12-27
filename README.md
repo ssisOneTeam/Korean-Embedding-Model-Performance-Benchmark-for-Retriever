@@ -2,55 +2,61 @@
 Korean Sentence Embedding Model Performance Benchmark for RAG System
 
 ## Ⅰ. 개요
-#### 1. 실험목표
-  > 한국어 임베딩 모델과 하이퍼파라미터 조정에 따른 Retriever 성능비교
-#### 2. 실험배경
+#### **1. 실험목표**
+  > 한국어 임베딩 모델에 Domain Adaptation을 진행함과 동시에 하이퍼파라미터 조정에 따라 Retriever 성능변화가 얼마나 일어나는지 실험하고자한다.
 
-  **1. 한국어, 특히 복지 도메인에 기반한 Embedding Model의 필요성**
+#### **2. 실험배경**
+**1. 기존 프로젝트의 후속실험으로 자세한 내용은 아래 항목을 참고할 것.**  
+
+- [SSiS TeamA - Ask-for-Welfare Service](https://github.com/ash-hun/Ask-for-Welfare)  
+- [SSiS TeamB - Advanced Semantic Search Engine](https://github.com/SSiS-TeamB/RAG)  
   
-  **2. 이전 진행 사항**
-  
-    2-1. 이전에 사용한 Base Korean Embedding Model: KoSimCSE-RoBERTa-multitask
-        - 한국어 Embedding Model 중 AVG Score가 가장 높은 Model 사용
-    
-    2-2. Tokenizer Vocab 추가 및 Embedding Model Domain Adaptation 진행
-        - Retriever 결과의 미흡함 확인
-        - 더 나은 성과를 위해 추가적인 실험과 비교 분석 필요
-        
-  **3. 연구 목적**
-  
-    - 실험을 통한 Korean Embedding Model 선정과 하이퍼 파리미터 조정함으로써 개선된 성능 도출
+**2. Domain Adaptation과 RAG**  
+
+0. 공통적으로 복지 도메인에 특화된 RAG System을 구축하고자 함.  
+1. 범용 Korean Embedding Model을 복지 도메인에 특화되게 DAPT(Domain Adaptation)을 적용하였음.
+    - 한국어 Embedding Model 중 AVG Score가 가장 높은 `KoSimCSE-RoBERTa-multitask` Model 사용    
+2. DAPT와 RAG System에서의 상관관계 개선 필요성 발견
+    - Retriever 결과의 미흡함 확인
+    - 더 나은 성과를 위해 추가적인 실험(=DAPT, Algorithm, etc..)과 비교 분석 필요
 
 #### 3. 실험환경
-    pip install -r requirement.txt
+1. 기획
+   - [복지로](https://www.bokjiro.go.kr/ssis-tbu/index.do)에서 오픈소스로 공개된 `2023 나에게 힘이되는 복지서비스` pdf 책자를 이용해 추가적인 데이터셋을 생성하여 실험을 진행
+   - `KoSimCSE-RoBERTa-multitask`을 사용했으나 타 임베딩 모델과의 성능비교가 필요
+   - 특정 하이퍼파라미터 조합에 따라 추가적인 성능개선이 가능성 확보
+
+2. 사용 라이브러리
+
+    > $ pip install -r requirement.txt
        
 ## Ⅱ. 가정
-  위 배경에 의거하여 한국어 문장 임베딩 모델과 그에따른 하이퍼파라미터를 조정함으로써 관련된 문서가 잘 도출되는 성능에 직결될 것이라 생각하였다. 즉, Korean Sentence Embedding Model선정과 해당모델에 대한 Hyper Parameter 조합에 따라 가장 Retriever 결과가 가장 잘 나오는 조합과 모델을 선정한다. 즉, 아래와 같은 2가지 방법을 바탕으로 성능비교를 진행하고자 한다.
-     
+  위 내용을 통해 기존 프로젝트에서 적용된 방식은 근거와 실험절차가 충분치 않으며 이를 보강할 수 있는 후속작업이 필요하다.  
+  즉, **임베딩 모델의 기본성능이 높으면 높을수록 DAPT를 진행했을시 더 높은 성능을 보일것**이라는 가정을 세우고 이를 증명하기 위한 실험을 진행하려고 한다. 
 
 ## Ⅲ. 방법
 
-  **1. 고성능의 Retriever 결과도출을 위한 다양한 한국어 문장 임베딩 모델들에 대한 성능비교 (HitRate)**
-  
-    1-1. 다양한 한국어 문장 임베딩 모델 리스트업
+#### 1. 데이터셋 생성
+  1. 생성방식
+  2. 비용산정
+
+#### 2. 성능비교
+  1. 고성능의 Retriever 결과도출을 위한 다양한 한국어 문장 임베딩 모델들에 대한 성능비교 (HitRate)
+    1. 다양한 한국어 문장 임베딩 모델 리스트업
       - 모델 선정이유/근거
       - 평가지표 선정이유/근거
-    
-    1-2. Retriever 성능평가 진행
+    2. Retriever 성능평가 진행
       - 성능평가 방식 선정
       - 성능평가 진행
-
-    1-3. 기존 모델(=KoSimCSE-RoBERTa-multitask)과의 Performance Benchmarking 진행
+    3. 기존 모델(=KoSimCSE-RoBERTa-multitask)과의 Performance Benchmarking 진행
       
-  **2. 가장 높은 성능을 가지는 모델에 대하여 하이퍼파라미터 조정 진행**
-  
-    2-1. 하이퍼파라미터 선정
-    
-    2-2. 하이퍼파라미터 튜닝후 성능평가 진행
+  2. 가장 높은 성능을 가지는 모델에 대하여 하이퍼파라미터 조정 진행
+    1. 하이퍼파라미터 선정
+    2. 하이퍼파라미터 튜닝후 성능평가 진행
       - 성능평가 방식 선정 (전수조사, GridsearchCV, etc… )
-      - 성능평가 진행  
-      
-    2-3. 하이퍼파라미터 튜닝 전/후 Performance Benchmarking 진행
+      - 성능평가 진행
+
+  3. RAG System 적용
 
 ## Ⅳ. 실험결과 (※ 전/후 결과비교가 중요)
   1. Embedding Model 비교/선정  
