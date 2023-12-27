@@ -3,11 +3,17 @@
 RAG System의 성능 향상을 위한 하나의 방법으로 Embedding Model의 개선을 통한 Retrieval(검색) 정확도 증가를 목적으로 한다.
 목적을 위해 Baseline으로 이용할 Embedding Model 선정 및 평가 과정을 간단하게 소개하면 다음과 같다.
 
+```
 1. Hugging Face MTEB Model 혹은 상용 Embedding Model (OpenAI, Anthropic, Cohere 등) list-up 후 기준에 맞추어 선정
-2. LLM을 이용해 Data <2023 나에게 힘이 되는 복지서비스>를 기반으로 , 질문-답변-참조 문서 순서로 QA Dataset 생성
+
+2. LLM을 이용해 Data <2023 나에게 힘이 되는 복지서비스>를 기반으로, 질문-답변-참조 문서 순서로 QA Dataset 생성
+
 3. 문서 자체를 각각의 Embedding Model을 통해 Vectorize 한 후, Vector DB에 각각의 collection별로 저장
+
 4. 생성한 QA Dataset에 있는 질문을 Embedding 한 후 Query로 VectorDB에 넣었을 때, 참조 문서가 retrieve 되는지 확인하고 만약 있다면 hit, 아니면 false의 간단한 형태로 metric 작성
+
 5. List-up한 모든 Embedding Model에 이전 절차를 수행한 후, 평가하고 가장 점수가 높은 Embedding Model을 Baseline으로 사용
+``````
 
 상세한 모델 선정 및 평가 과정은 후술.
 ___
@@ -39,7 +45,7 @@ OpenAI/text-embedding-ada-002
 ___
 ## 2. QA Dataset 생성
 
- [QA generator](https://github.com/ssisOneTeam/Korean-Embedding-Model-Performance-Benchmark-for-Retriever/tree/main/QA_generator) 참조
+ - [QA generator](https://github.com/ssisOneTeam/Korean-Embedding-Model-Performance-Benchmark-for-Retriever/tree/main/QA_generator) 참조
  
 ___
 ## 3. Dataset Embed
@@ -50,9 +56,13 @@ ___
 ## 4. Hitrate 평가
 
 - 방법
- 1. 생성한 QA Dataset을 기반으로 각 모델, 문서 형태 별 collection에 Cosine 유사도 방식의 Query 검색을 진행한다.
+```
+ 1. 생성한 QA Dataset을 기반으로 각 모델, 문서 형태 별 collection에 Cosine 유사도 방식의 Query 검색을 진행
+
  2. 만약 QA Dataset의 유사도가 Retreive 한 문서 개수와 일치(@1, @3, @5 등 가장 가까운 문서 여러개를 추출하도록 했음)한다면 "hit"한 것으로 판정해서 비율을 계산
- 3. 추산한 비율들을 종합한 후 list-up
+
+ 3. 추산한 비율들을 종합한 후 산술 평균으로 list-up
+```
 
 - 예시
 <img src="readmeimage/hitrate.png">
