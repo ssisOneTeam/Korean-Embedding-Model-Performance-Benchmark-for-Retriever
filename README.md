@@ -133,9 +133,6 @@ Korean Sentence Embedding Model Performance Benchmark for RAG System
     2. BM25, Re-Rank, Filtering 적용 전/후 Retriever 성능비교  
   3. 최종 실험결과 도출  
 
-    ___
-## 5. Result
-
   | Model                                       | @1     | @3     | @5     | @10    | Average |
   |---------------------------------------------|--------|--------|--------|--------|---------|
   | paraphrase-multilingual-mpnet-base-v2-a     | 40.0   | 58.095 | 63.81  | 73.333 | 58.810  |
