@@ -110,19 +110,24 @@ Korean Sentence Embedding Model Performance Benchmark for RAG System
 
 #### 2. 성능비교
   1. 고성능의 Retriever 결과도출을 위한 다양한 한국어 문장 임베딩 모델들에 대한 성능비교 (HitRate)
-    1. 다양한 한국어 문장 임베딩 모델 리스트업
-      - 모델 선정이유/근거
-      - 평가지표 선정이유/근거
-    2. Retriever 성능평가 진행
-      - 성능평가 방식 선정
-      - 성능평가 진행
-    3. 기존 모델(=KoSimCSE-RoBERTa-multitask)과의 Performance Benchmarking 진행
+
+     1. 다양한 한국어 문장 임베딩 모델 리스트업
+         - 모델 선정이유/근거
+         - 평가지표 선정이유/근거
+
+     2. Retriever 성능평가 진행
+        - 성능평가 방식 선정
+        - 성능평가 진행 </br>
+
+     3. 기존 모델(=KoSimCSE-RoBERTa-multitask)과의 Performance Benchmarking 진행
       
   2. 가장 높은 성능을 가지는 모델에 대하여 하이퍼파라미터 조정 진행
-    1. 하이퍼파라미터 선정
-    2. 하이퍼파라미터 튜닝후 성능평가 진행
-      - 성능평가 방식 선정 (전수조사, GridsearchCV, etc… )
-      - 성능평가 진행
+
+     1. 하이퍼파라미터 선정
+
+     2. 하이퍼파라미터 튜닝후 성능평가 진행
+        - 성능평가 방식 선정 (전수조사, GridsearchCV, etc… )
+        - 성능평가 진행
 
   3. RAG System 적용
 
